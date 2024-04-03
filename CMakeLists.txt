@@ -14,10 +14,9 @@ set(CMAKE_LIBRARY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 set(CMAKE_BUILD_TYPE Release)
 # Control whether to call the output directory function echo_dir
 set(ECHO_DIR OFF)
-
-add_subdirectory(inc)
-add_subdirectory(lib)
-add_subdirectory(src)
+# use this in sub directory
+set(ALL_LIBS "")
+set(ALL_INCS "")
 
 function(echo_dir)
     message("INFO === Current path: ${CMAKE_CURRENT_SOURCE_DIR} === INFO")
@@ -39,3 +38,22 @@ endfunction(echo_dir)
 if(ECHO_DIR)
     echo_dir()
 endif(ECHO_DIR)
+
+message("========== INFO 'inc' INFO ==========")
+add_subdirectory(inc)
+# message("所有头文件名称：${ALL_INCS}")
+# message("INFO: subdirectory 'inc' compeleted.\n")
+message("========== INFO 'inc' INFO ==========\n")
+
+message("========== INFO 'lib' INFO ==========")
+add_subdirectory(lib)
+# message("所有库文件名称：${ALL_LIBS}")
+# message("INFO: subdirectory 'lib' compeleted.\n")
+message("========== INFO 'lib' INFO ==========\n")
+
+message("========== INFO 'src' INFO ==========")
+add_subdirectory(src)
+message("WARN: 可执行文件名称：${PROJECT_NAME}")
+message("WARN: 可执行文件路径：./bin")
+# message("INFO: subdirectory 'src' compeleted.\n")
+message("========== INFO 'src' INFO ==========\n")
