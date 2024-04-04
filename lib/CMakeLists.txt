@@ -44,8 +44,16 @@ function(get_current_directories_windows)
         string(REPLACE "\r\n" ";" SUBDIRECTORIES_LIST ${SUBDIRECTORIES})
         list(REMOVE_ITEM SUBDIRECTORIES_LIST .)
         foreach(DIR IN LISTS SUBDIRECTORIES_LIST)
-            message("Found subdirectory: ${DIR}")
+            message("库文件路径：${DIR}")
+            # 对目录名称做截取，去掉前面的路径
+            get_filename_component(DIR_NAME ${DIR} NAME)
+            message("库文件名称：${DIR_NAME}")
+            add_subdirectory(${DIR_NAME})
+            # 追加名称到一个函数中的缓存列表
+            list(APPEND ALL_LIBS_NAME ${DIR_NAME})
         endforeach()
+        # 将更新后的列表赋值回父作用域，函数外
+        set(SUB_ALL_LIBS ${ALL_LIBS_NAME} PARENT_SCOPE)
     endif()   
 endfunction(get_current_directories_windows)
 
@@ -58,6 +66,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     # 在Windows环境下执行的操作
     get_current_directories_windows()
+    set(ALL_LIBS ${SUB_ALL_LIBS} PARENT_SCOPE)
 else()
     message(WARNING "Unsupported operating system.")
 endif()
