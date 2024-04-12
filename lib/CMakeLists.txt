@@ -11,20 +11,24 @@ function(get_current_directories_linux)
     if(ERRORS)
         message("Error occurred while finding subdirectories: ${ERRORS}")
     else()
-        string(REPLACE "\n" ";" SUBDIRECTORIES_LIST ${SUBDIRECTORIES})
+        if (SUBDIRECTORIES)
+            string(REPLACE "\n" ";" SUBDIRECTORIES_LIST ${SUBDIRECTORIES})
 
-        foreach(DIR IN LISTS SUBDIRECTORIES_LIST)
-            message("库文件路径：${DIR}")
-            # 对目录名称做截取，去掉前面的路径
-            get_filename_component(DIR_NAME ${DIR} NAME)
-            message("库文件名称：${DIR_NAME}")
-            add_subdirectory(${DIR_NAME})
-            # 追加名称到一个函数中的缓存列表
-            list(APPEND ALL_LIBS_NAME ${DIR_NAME})
-        endforeach()
+            foreach(DIR IN LISTS SUBDIRECTORIES_LIST)
+                message("库文件路径：${DIR}")
+                # 对目录名称做截取，去掉前面的路径
+                get_filename_component(DIR_NAME ${DIR} NAME)
+                message("库文件名称：${DIR_NAME}")
+                add_subdirectory(${DIR_NAME})
+                # 追加名称到一个函数中的缓存列表
+                list(APPEND ALL_LIBS_NAME ${DIR_NAME})
+            endforeach()
 
-        # 将更新后的列表赋值回父作用域，函数外
-        set(SUB_ALL_LIBS ${ALL_LIBS_NAME} PARENT_SCOPE)
+            # 将更新后的列表赋值回父作用域，函数外
+            set(SUB_ALL_LIBS ${ALL_LIBS_NAME} PARENT_SCOPE)
+        else()
+            message("No subdirectories found in 'lib' directory.")
+        endif()
     endif()
 endfunction(get_current_directories_linux)
 
