@@ -14,8 +14,4 @@ file(GLOB_RECURSE SRC "*.c" "*.cpp")
 # 生成库文件
 add_library(${CURRENT_DIR_NAME} SHARED ${SRC})
 
-target_link_libraries(${CURRENT_DIR_NAME} hello_interface)
-
-if(ECHO_DIR)
-    echo_dir()
-endif(ECHO_DIR)
+target_link_libraries(${CURRENT_DIR_NAME} ${CURRENT_DIR_NAME}_proc)
